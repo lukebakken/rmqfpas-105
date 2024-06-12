@@ -1,4 +1,4 @@
-.PHONY: clean down up perms rmq-perms
+.PHONY: clean down up perms rmq-perms export-definitions
 
 DOCKER_FRESH ?= false
 RABBITMQ_DOCKER_TAG ?= rabbitmq:3.11.28-management
@@ -23,3 +23,10 @@ perms:
 
 rmq-perms:
 	sudo chown -R '999:999' data log
+
+export-definitions:
+	mkdir -p $(CURDIR)/tmp || true
+	docker compose exec --no-TTY rmq0 rabbitmqctl export_definitions - | jq '.' > $(CURDIR)/tmp/defs.json
+
+import-definitions:
+	cat $(CURDIR)/tmp/defs.json | docker compose exec --no-TTY rmq0 rabbitmqctl import_definitions

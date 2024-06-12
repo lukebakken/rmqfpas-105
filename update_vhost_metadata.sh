@@ -9,7 +9,6 @@ set +o errexit
 for idx in 0 1 2
 do
     svc="rmq$idx"
-    # NB: https://github.com/docker/compose/issues/1262
-    container_id="$(docker compose ps -q "$svc")"
-    docker exec "$container_id" /opt/rabbitmq/sbin/rabbitmqctl update_vhost_metadata / --default-queue-type quorum
+    echo "[INFO] svc: $svc"
+    docker compose exec --no-TTY "$svc" /opt/rabbitmq/sbin/rabbitmqctl update_vhost_metadata / --default-queue-type quorum
 done
