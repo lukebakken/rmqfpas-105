@@ -3,14 +3,10 @@
 set -o errexit
 set -o nounset
 
-echo "[INFO] setting default queue type to quorum..."
+curdir="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
+readonly curdir
 
-set +o errexit
-for idx in 0 1 2
-do
-    svc="rmq$idx"
-    # NB: https://github.com/docker/compose/issues/1262
-    container_id="$(docker compose ps -q "$svc")"
-    echo "[INFO] svc: $svc"
-    docker exec "$container_id" /opt/rabbitmq/sbin/rabbitmqctl update_vhost_metadata / --default-queue-type quorum
-done
+echo "[INFO] exporting definitions from rmq0..."
+
+mkdir -p "$curdir/tmp" || true
+docker compose exec --no-TTY rmq0 rabbitmqctl export_definitions - | jq '.' > "$curdir/tmp/defs.json"

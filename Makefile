@@ -25,8 +25,7 @@ rmq-perms:
 	sudo chown -R '999:999' data log
 
 export-definitions:
-	mkdir -p $(CURDIR)/tmp || true
-	docker compose exec --no-TTY rmq0 rabbitmqctl export_definitions - | jq '.' > $(CURDIR)/tmp/defs.json
+	$(CURDIR)/export_definitions.sh
 
 import-definitions:
-	cat $(CURDIR)/tmp/defs.json | docker compose exec --no-TTY rmq0 rabbitmqctl import_definitions
+	$(CURDIR)/import_definitions.sh

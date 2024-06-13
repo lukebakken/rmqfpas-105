@@ -3,6 +3,11 @@
 set -o errexit
 set -o nounset
 
+curdir="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
+readonly curdir
+
+"$curdir/export_definitions.sh"
+
 echo "[INFO] restarting cluster!"
 
 set +o errexit
@@ -19,3 +24,5 @@ do
     docker compose build --build-arg RABBITMQ_DOCKER_TAG='rabbitmq:3.12-management' "$svc"
     docker compose up --detach --no-deps "$svc"
 done
+
+"$curdir/import_definitions.sh"
