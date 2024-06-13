@@ -16,6 +16,6 @@ do
     then
         sleep 10
     fi
-	docker compose build --build-arg RABBITMQ_DOCKER_TAG='rabbitmq:3.12-management' "$svc"
+    docker compose build --build-arg RABBITMQ_DOCKER_TAG='rabbitmq:3.12-management' "$svc"
     docker compose up --detach --no-deps "$svc"
 done
