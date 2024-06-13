@@ -5,10 +5,6 @@ set -o nounset
 
 echo "[INFO] setting default queue type to quorum..."
 
-set +o errexit
-for idx in 0 1 2
-do
-    svc="rmq$idx"
-    echo "[INFO] svc: $svc"
-    docker compose exec --no-TTY "$svc" /opt/rabbitmq/sbin/rabbitmqctl update_vhost_metadata / --default-queue-type quorum
-done
+docker compose exec --no-TTY rmq0 /opt/rabbitmq/sbin/rabbitmqctl update_vhost_metadata / --default-queue-type quorum
+docker compose exec --no-TTY rmq0 /opt/rabbitmq/sbin/rabbitmqctl add_vhost rmqfpas-105
+docker compose exec --no-TTY rmq0 /opt/rabbitmq/sbin/rabbitmqctl update_vhost_metadata rmqfpas-105 --default-queue-type quorum

@@ -3,7 +3,7 @@
 set -o errexit
 set -o nounset
 
-echo "[INFO] setting default queue type to quorum..."
+echo "[INFO] listing vhost metadata ..."
 
 set +o errexit
 for idx in 0 1 2
